@@ -25,9 +25,14 @@
 <body>
     <section class="content">
         <h1>Pokedex</h1>
-        <ol id="pokemonList" class="pokemons">
+        <ol id="pokemonList" class="pokemons"  onclick="showDetailsOnclick(document.getElementById.textContent)">
           
         </ol>
+
+        <div class="modal" id="modal" onclick="hideModal()">
+            <div class="modalContent" id="modalContent"></div>
+        </div>
+        
         <div class="pagination">
             <button id="loadMoreButton" type="button">Load More</button>
         </div>
