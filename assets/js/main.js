@@ -65,27 +65,92 @@ function showDetailsOnclick(idElemento){
     const mainContent = document.getElementById('modalContent');
     mainContent.innerHTML = '';
 
-    
-    //const number = document.querySelector(`${pokemon.number}`).textContent; //vai obter o número do elemento htm
-    //pokeApi.getPokemons é uma função que foi definir em poke-api.js    
-    pokeApi.getPokemons(offset, limit).then((pokemons = [])=> { //pokemons é uma lista definirda pelo offset e pelo limit
+   //para essa chamada, offset = 0 e limit = maxRecord permite que seja mostrado o modal de todos que estão na tela
+    pokeApi.getPokemons(0, maxRecord).then((pokemons = [])=> { //pokemons é uma lista definirda pelo offset e pelo limit
         pokemons.forEach((pokemon) => {
+            const pokemonStats = [`${pokemon.hp}` , `${pokemon.attack}` , `${pokemon.defense}`, `${pokemon.special_attack}` ,`${pokemon.special_defense}`, `${pokemon.speed}`]  
             if(pokemon.number == idElemento) { //pokemon.number == pokeDetail.id
-                const newHtml = `<li class="pokemon ${pokemon.type}">
+                const newHtml = `
+                            <div class="pokemonModal ${pokemon.type}">
+                                <span class="name">${pokemon.name}</span>
                                 <span class="number">#${pokemon.number}</span>
-                                    <span class="name">${pokemon.name}</span>
+                                    
                                     <div class="detail">
                                         <ol class="types">
                                             ${pokemon.types.map((type) => `<li class="type ${type}">${type}</li>`).join('')}
                                         </ol>
+                                    </div> 
+                                        
                                     <img src="${pokemon.photo}" 
-                                        alt="${pokemon.name}">
-                                    </div>                
-                            </li>`
+                                    alt="${pokemon.name}">         
+                            </div>
+                            <div class="stats">
+                                <div class="stat">
+                                    <div class="label">Weight</div>
+                                       <span> ${pokemon.weight} Kg </span>
+                                </div>
+
+                                <div class="stat">
+                                    <div class="label">HP</div>
+                                    <div class="statBar" id="hpBar"></div>
+                                </div>
+
+                                <div class="stat">
+                                    <div class="label">Attack</div>
+                                    <div class="statBar" id="attackBar"></div>
+                                </div>
+
+                                <div class="stat">
+                                    <div class="label">Defense</div>
+                                    <div class="statBar" id="defenseBar"></div>
+                                </div>
+
+                                <div class="stat">
+                                    <div class="label">Sp. Attack</div>
+                                    <div class="statBar" id="specialAttackBar"></div>
+                                </div>
+
+                                <div class="stat">
+                                    <div class="label">Sp. Defense</div>
+                                    <div class="statBar" id="specialDefenseBar"></div>
+                                </div>
+                                
+                                <div class="stat">
+                                    <div class="label">Speed</div>
+                                    <div class="statBar" id="speedBar"></div>
+                                </div> 
+                            </div>     
+                            
+                            `
                 mainContent.innerHTML += newHtml
             }        
         })
     })
     
+}
+
+
+function statsBar(pokemonStats){
+
+    const labels = [
+        "hp",
+        "attack",
+        "defense",
+        "special_attack",
+        "special_defense",
+        "speed",
+    ]
+
+    labels.forEach((label, index) => {
+        const valor = pokemonStats[index];
+        const bar = document.getElementById(label + "Bar");
+        const barFill = document.createElement("div");
+
+        barFill.classList.add("barFill");
+        barFill.style.width = valor + "%";
+        bar.innerHTML = "";
+        bar.appendChild(barFill);
+
+    })
 }
 
