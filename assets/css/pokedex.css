@@ -129,6 +129,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-image: url('../pokedexMenubg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
 }
 
 
@@ -213,6 +217,7 @@
 }
 
 .label{
+    background-color: #fff;
     font-size: 1rem;
     font-family: 'Roboto', sans-serif;
     width: 100px;
@@ -222,6 +227,7 @@
 }
 
 .stats span{
+    background-color: #fff;
     font-size: 1rem;
     font-family: 'Roboto', sans-serif;
     width: 200px;
@@ -232,6 +238,31 @@
 
 }
 
+.barFillhp{
+    height: 100%;
+    background-color: #FF0000;
+}
+.barFillattack{
+    height: 100%;
+    background-color: #F08030;
+}
+.barFilldefense{
+    height: 100%;
+    background-color: #F8D030;
+}
+.barFillspecialAttack{
+    height: 100%;
+    background-color: #6890F0;
+}
+.barFillspecialDefense{
+    height: 100%;
+    background-color: #78C850;
+}
+.barFillspeed{
+    height: 100%;
+    background-color: #F85888;
+}
+
 .statBar{
     margin-left: 0.5rem ;
     height: 20px;
@@ -239,11 +270,6 @@
     background-color: lightgray;
     border-radius: 10px;
     overflow: hidden;
-}
-
-.barFill{
-    height: 100%;
-    background-color: green;
 }
 
 

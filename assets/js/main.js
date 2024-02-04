@@ -87,7 +87,7 @@ function showDetailsOnclick(idElemento){
                             <div class="stats">
                                 <div class="stat">
                                     <div class="label">Weight</div>
-                                       <span> ${pokemon.weight} Kg </span>
+                                       <span> ${convertWeight(pokemon.weight)} Kg </span>
                                 </div>
 
                                 <div class="stat">
@@ -123,6 +123,7 @@ function showDetailsOnclick(idElemento){
                             
                             `
                 mainContent.innerHTML += newHtml
+                statsBar(pokemonStats);
             }        
         })
     })
@@ -136,8 +137,8 @@ function statsBar(pokemonStats){
         "hp",
         "attack",
         "defense",
-        "special_attack",
-        "special_defense",
+        "specialAttack",
+        "specialDefense",
         "speed",
     ]
 
@@ -146,11 +147,19 @@ function statsBar(pokemonStats){
         const bar = document.getElementById(label + "Bar");
         const barFill = document.createElement("div");
 
-        barFill.classList.add("barFill");
+        barFill.classList.add("barFill" + label);
         barFill.style.width = valor + "%";
         bar.innerHTML = "";
         bar.appendChild(barFill);
 
     })
+}
+
+function convertWeight(weight){
+    if(weight === "unknown"){
+        return "desconhecido"
+    }
+
+    return (weight / 10).toFixed(2);
 }
 
