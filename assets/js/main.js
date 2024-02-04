@@ -3,20 +3,61 @@ const pokemonList = document.getElementById('pokemonList'); //é a <ol>
 
 const loadMoreButton = document.getElementById('loadMoreButton');
 
+let loadMoreOffset = 0;
+let maxRecord = 151;
 
-const limit = 10;
-let offset = 0;
+const inputNumeroResultados = document.getElementById('resultsInput');
+const botaoEnviar = document.getElementById('botaoEnviar');
+
+function verificarInput() {
+    if (inputNumeroResultados.value.trim() !== '') {
+        botaoEnviar.disabled = false; // habilita o botão se o input tiver um valor
+    } else {
+        botaoEnviar.disabled = true; // desabilita o botão se o input estiver vazio
+    }
+}
+
+inputNumeroResultados.addEventListener('input', verificarInput);
 
 
 
-const maxRecord = 151
+//gen 1 -- 1 a 151   | gen2 -- 152 a 251  |  gen3 -- 252 a 386
+function getPokemonGenRange(){
+
+    const selectGen = document.getElementById('genSelect');
+    const selectedGenValue = selectGen.value;
+
+    const limitSelected = document.getElementById('resultsInput');
+    const limit = parseInt(limitSelected.value);
+
+    if(selectedGenValue === 'gen1'){
+        let offset = 0
+        maxRecord = 151
+        loadPokemonItens(offset, limit);
+
+    } else if(selectedGenValue ==='gen2'){
+        let offset = 151
+        maxRecord = 251
+        loadPokemonItens(offset, limit);
+
+     } else if(selectedGenValue ==='gen3'){
+        let offset = 251
+        maxRecord = 386
+        loadPokemonItens(offset, limit);
+
+     }else{
+        alert("Escolha uma geração de pokemons")
+    } 
+    showLoadMoreButton();
+}
 
 
-function loadPokemonItens(offset, limit){          
+function loadPokemonItens(offset, limit){    
+    pokemonList.innerHTML = '';      
     //pokeApi.getPokemons é uma função que foi definir em poke-api.js    
     pokeApi.getPokemons(offset, limit).then((pokemons = [])=> { //pokemons é uma lista definirda pelo offset e pelo limit
         const newHtml = pokemons.map((pokemon)=> 
-               `<li class="pokemon ${pokemon.type}" id=${pokemon.number} onclick="showDetailsOnclick(${pokemon.number})">
+               `<li class="pokemon ${pokemon.type}" id=${pokemon.number} onclick="showDetailsOnclick(${pokemon.number}, ${offset}, ${limit})">
                     <span class="number">#${pokemon.number}</span>
                     <span class="name">${pokemon.name}</span>
                     <div class="detail">
@@ -34,30 +75,53 @@ function loadPokemonItens(offset, limit){
         })
 }
 
-loadPokemonItens(offset, limit);
+genSelect.addEventListener('click', ()=>{
+    const selectGen = document.getElementById('genSelect');
+    const selectedGenValue = selectGen.value;
+    
+    if(selectedGenValue === 'gen1'){
+        loadMoreOffset = 0;
+
+    } else if(selectedGenValue ==='gen2'){
+        loadMoreOffset = 151;
+
+    } else if(selectedGenValue ==='gen3'){
+        loadMoreOffset = 251;
+    }
+})
+
 
 loadMoreButton.addEventListener('click', ()=>{
-    offset += limit
+   
+    const searchLimit = document.getElementById('resultsInput');
+    const limit = parseInt(searchLimit.value);
+    loadMoreOffset += limit
 
-    const qtdRecordNextPage = offset + limit
+
+    const qtdRecordNextPage = loadMoreOffset + limit
 
     if(qtdRecordNextPage >= maxRecord){
-        const newLimit =  maxRecord - offset
-        loadPokemonItens(offset, newLimit);
+        const newLimit =  maxRecord - loadMoreOffset
+        loadPokemonItens(loadMoreOffset, newLimit);
 
         loadMoreButton.parentElement.removeChild(loadMoreButton)
     } else{
-        loadPokemonItens(offset, limit);
+        loadPokemonItens(loadMoreOffset, limit);
     }
     
 })
+
+function showLoadMoreButton(){
+    const loadMoreButton = document.getElementById('loadMoreButton');
+    loadMoreButton.style.visibility = "visible";
+}
 
 function hideModal(){
     const modal = document.getElementById('modal');
     modal.style.visibility = "hidden";
 }
 
-function showDetailsOnclick(idElemento){
+function showDetailsOnclick(idElemento, offset, limit){ //criada em loadPokemonsItens
 
     const modal =  document.getElementById("modal");
     modal.style.visibility = "visible" 
@@ -66,7 +130,7 @@ function showDetailsOnclick(idElemento){
     mainContent.innerHTML = '';
 
    //para essa chamada, offset = 0 e limit = maxRecord permite que seja mostrado o modal de todos que estão na tela
-    pokeApi.getPokemons(0, maxRecord).then((pokemons = [])=> { //pokemons é uma lista definirda pelo offset e pelo limit
+    pokeApi.getPokemons(offset, limit).then((pokemons = [])=> { //pokemons é uma lista definirda pelo offset e pelo limit
         pokemons.forEach((pokemon) => {
             const pokemonStats = [`${pokemon.hp}` , `${pokemon.attack}` , `${pokemon.defense}`, `${pokemon.special_attack}` ,`${pokemon.special_defense}`, `${pokemon.speed}`]  
             if(pokemon.number == idElemento) { //pokemon.number == pokeDetail.id

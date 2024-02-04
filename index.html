@@ -25,6 +25,13 @@
 <body>
     <section class="content">
         <h1>Pokedex</h1>
+        <select class="pokemonGenSelect" id="genSelect">
+            <option value="gen1">1º Geração</option>
+            <option value="gen2">2º Geração</option>
+            <option value="gen3">3º Geração</option>
+            <input class="pokemonInput" id="resultsInput" type="number" min="1" max="12" placeholder="Informe um número" />
+            <button id="botaoEnviar" onclick="getPokemonGenRange()" disabled>Enviar</button>
+        </select>
         <ol id="pokemonList" class="pokemons">
           
         </ol>
